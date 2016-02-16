@@ -51,6 +51,7 @@ void JSON_draw_avatar(){
   background(200,200,255);
   for(int p=0, end=parts.size(); p<end; p++) {
   AvatarPart prt = (AvatarPart) parts.get(p);
+  prt.draw();
  }}
 
   AvatarPart addPart(String sImage, int W, int H, int x, int y){

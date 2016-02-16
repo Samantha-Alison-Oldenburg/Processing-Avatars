@@ -104,6 +104,17 @@ function check_for_users_without_avatars()
 
 }
 
+function json_get_user_avatar_info($user_id){
+	global $avatar_table;
+	global $wpdb;
+	$query = "SELECT * FROM " . $avatar_table . " WHERE user_id = " . $user_id;
+	$result = $wpdb->get_results($query, ARRAY_A);
+
+	return wp_json_encode($result);
+}
+
+
+
 function get_user_avatar_info($user_id)
 {
 	global $avatar_table;
@@ -152,9 +163,19 @@ function processing_get_avatar($avatar, $user, $size, $default, $alt = '')
 	$html_height = 'height = "' . $size . '" ';
 
 	$avatar_data = get_user_avatar_info($id);
+	$json_data = json_get_user_avatar_info($id);
 
 	 if ($test_var)
-	$avatar = '<script src="'.plugin_dir_url( $file ). 'processing-avatars/processing-1.4.8.js"></script> ' . '<canvas data-processing-sources="'. plugin_dir_url( $file ). 'processing-avatars/sketch_151226a/sketch_151226a.pde" width="26" height="26" ></canvas>' . '<script  type="application/javascript">' . ' var arg = [0, 0, ' . 26 . ', ' . 26 . ', '. ' 2, 6, 4, 2, 5, 0, 0, 0, 0, 0, 0' . ' ]; ' . ' </script>';
+	 $avatar = '<script src="'.plugin_dir_url( $file ). 'processing-avatars/processing-1.4.8.js"></script> ' . '<canvas id="avatarSketch" data-processing-sources="'. plugin_dir_url( $file ). 'processing-avatars/sketch_151226a/sketch_151226a.pde" width="26" height="26" ></canvas>' . '<script  type="application/javascript">' . ' var pjs = Processing.getInstanceById("avatarSketch"); var json = '. $json_data.  ' ;
+		  // var data = json; if (data){ for (p = 0, end = data.parts.length; p<end;p++){
+			// 	var part = data.parts[p]; pjs.addPart(part.sImage, part.W, part.H, part.posX, part.pasY);}}
+			// 	console.log(data);
+				console.log(json);
+				//pjs.addPart(json.sImage, json.width, json.height, json.xPos, json.yPos);
+
+				</script>';
+
+	//  $avatar = '<script src="'.plugin_dir_url( $file ). 'processing-avatars/processing-1.4.8.js"></script> ' . '<canvas data-processing-sources="'. plugin_dir_url( $file ). 'processing-avatars/sketch_151226a/sketch_151226a.pde" width="26" height="26" ></canvas>' . '<script  type="application/javascript">' . ' var arg = [0, 0, ' . 26 . ', ' . 26 . ', '. ' 2, 6, 4, 2, 5, 0, 0, 0, 0, 0, 0' . ' ]; ' . ' </script>';
 	 else
 	// 	$avatar = '<script src="http://www.scigamescrew.com/public_html/staging/wp-content/plugins/processing-avatars//processing-1.4.8.js"></script> ' . '<canvas data-processing-sources="http://www.scigamescrew.com/public_html/staging/wp-content/plugins/processing-avatars//sketch_151226a.pde" ' . $html_width . $html_height . '></canvas>' . '<script  type="application/javascript">' . ' var arg = [0, 0, ' . $size . ', ' . $size . ', ' . $avatar_data . ']; ' . ' </script>';
 	 	$avatar = '<script src="'.plugin_dir_url( $file ). 'processing-avatars/processing-1.4.8.js"></script> ' . '<canvas data-processing-sources="'. plugin_dir_url( $file ). 'processing-avatars/sketch_151226a/sketch_151226a.pde" width="$html_width" height="$html_height" ></canvas>' . '<script  type="application/javascript">' . ' var arg = [0, 0, ' . $size . ', ' . $size . ', '.  $avatar_data . ' ]; ' . ' </script>';
