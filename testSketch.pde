@@ -6,6 +6,9 @@ ArrayList parts;
 void setup() {
   size(48,48);
   parts = new ArrayList();
+  for(int p=0, end=parts.size(); p<end; p++) {
+  AvatarPart prt = (AvatarPart) parts.get(p);
+  }
 }
 
 void draw() {
@@ -50,7 +53,6 @@ class AvatarPart{
 void JSON_draw_avatar(){
   background(200,200,255);
   for(int p=0, end=parts.size(); p<end; p++) {
-  AvatarPart prt = (AvatarPart) parts.get(p);
   prt.draw();
  }}
 
